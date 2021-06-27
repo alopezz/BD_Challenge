@@ -33,11 +33,12 @@ config :contact_info, ContactInfoWeb.Endpoint,
 # Configure authentication
 config :contact_info, :auth_required, true
 
-config :contact_info, :public_pem,
-  System.get_env("PUBLIC_PEM") ||
-  raise """
-  A public key for authenticating tokens is required in production
-  """
+config :contact_info,
+       :public_pem,
+       System.get_env("PUBLIC_PEM") ||
+         raise("""
+         A public key for authenticating tokens is required in production
+         """)
 
 # ## Using releases (Elixir v1.9+)
 #

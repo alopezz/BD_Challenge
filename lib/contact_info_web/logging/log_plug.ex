@@ -9,22 +9,29 @@ defmodule ContactInfoWeb.LogPlug do
   end
 
   def log_changes(conn) do
-    user_id = case Map.get(conn.assigns, :claims) do
-		nil -> "Unknown"
-		{:ok, claims} -> Map.get(claims["sub"], "id", "Unknown")
-	      end
+    user_id =
+      case Map.get(conn.assigns, :claims) do
+        nil -> "Unknown"
+        {:ok, claims} -> Map.get(claims["sub"], "id", "Unknown")
+      end
 
-    change_description = case Map.get(conn.assigns, :change_description) do
-			   %{op: :create, case_id: case_id, changes: changes} ->
-			     "created #{case_id} with fields #{field_names(changes)}"
-			   %{op: :update, case_id: case_id, changes: changes} ->
-			     "updated #{case_id}, affecting fields #{field_names(changes)}"
-			   %{op: :read, case_id: case_id} ->
-			     "read #{case_id}"
-			   %{op: :delete, case_id: case_id} ->
-			     "deleted #{case_id}"
-			   _ -> nil
-			 end
+    change_description =
+      case Map.get(conn.assigns, :change_description) do
+        %{op: :create, case_id: case_id, changes: changes} ->
+          "created #{case_id} with fields #{field_names(changes)}"
+
+        %{op: :update, case_id: case_id, changes: changes} ->
+          "updated #{case_id}, affecting fields #{field_names(changes)}"
+
+        %{op: :read, case_id: case_id} ->
+          "read #{case_id}"
+
+        %{op: :delete, case_id: case_id} ->
+          "deleted #{case_id}"
+
+        _ ->
+          nil
+      end
 
     # This could be replaced by calls to an external service sending the same
     # information.
@@ -39,5 +46,4 @@ defmodule ContactInfoWeb.LogPlug do
     Map.keys(changes)
     |> Enum.join(", ")
   end
-
 end

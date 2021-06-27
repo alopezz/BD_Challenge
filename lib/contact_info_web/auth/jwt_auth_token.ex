@@ -8,6 +8,7 @@ defmodule ContactInfoWeb.JwtAuthToken do
       signer_alg: "RS256",
       key_pem: public_pem
     ]
+
     %Joken.Signer{
       alg: signer_config[:signer_alg],
       jwk: signing_key(signer_config[:key_pem])
@@ -19,21 +20,21 @@ defmodule ContactInfoWeb.JwtAuthToken do
   end
 end
 
-
 defmodule CheckExpirationHook do
   use Joken.Hooks
 
   @impl true
   def after_verify(_hook_options, result, input) do
     case result do
-      {:error, :invalid_signature} -> {:halt, result}
+      {:error, :invalid_signature} ->
+        {:halt, result}
+
       {:ok, claims} ->
-	if claims["exp"] > Joken.current_time() do
-	  {:cont, result, input}
-	else
-	  {:halt, :expired_token}
-	end
+        if claims["exp"] > Joken.current_time() do
+          {:cont, result, input}
+        else
+          {:halt, :expired_token}
+        end
     end
   end
-  
 end

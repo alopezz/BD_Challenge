@@ -14,16 +14,17 @@ defmodule ContactInfoWeb.JwtAuthPlug do
   end
 
   defp authenticate(conn, public_pem) do
-    decoded = conn
-    |> bearers_from_header
-    |> Enum.map(&JwtAuthToken.decode(&1, public_pem))
-    |> Enum.find(fn
-      {:ok, _} -> true
-      _ -> false
-    end)
+    decoded =
+      conn
+      |> bearers_from_header
+      |> Enum.map(&JwtAuthToken.decode(&1, public_pem))
+      |> Enum.find(fn
+        {:ok, _} -> true
+        _ -> false
+      end)
 
     case decoded do
-      nil -> forbidden(conn) 
+      nil -> forbidden(conn)
       claims -> success(conn, claims)
     end
   end
@@ -44,14 +45,15 @@ defmodule ContactInfoWeb.JwtAuthPlug do
   defp bearers_from_header(conn) do
     Enum.reduce(conn.req_headers, [], fn header, acc ->
       case header do
-	{"authorization", value} ->
-	  case String.split(value) do
-	    ["Bearer", token] -> [token | acc]
-	    _ -> acc
-	  end
-	_ -> acc
+        {"authorization", value} ->
+          case String.split(value) do
+            ["Bearer", token] -> [token | acc]
+            _ -> acc
+          end
+
+        _ ->
+          acc
       end
     end)
   end
-  
 end

@@ -76,5 +76,5 @@ default_public_pem = """
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2osnYa7m59V5TSCFURXOdtjGP8CEZdMZ5ptN1ZEN8mwPhi1sfhR9XGlfsl6YjkGlaz2yBreJ4q/sTL6yARea9z7iZOoMzDXj/nAWWEUuI5TJ/vkNMprUMjBd+XfH2hBDCQM3l+9sq6Ovthoxb9/2pfTmuc+k30XR41GBv3F694KSNrpDtbQABRYJNsuU2QMP1xgPst7ceBvShQic4a8sW+c8xuDO8LUvPudVG7z/Azvzj4nJjsfAkCCUpTKLJmDhWu22TMYxWY/zussxjurdUMptQuNDYP/QrIStJsZokvCBgtHvTgZ/rCw5oe3XYhxXEOfO0qTKKt/D8yf9faRRzwIDAQAB
 -----END PUBLIC KEY-----
 """
-config :contact_info, :public_pem, System.get_env("PUBLIC_PEM", default_public_pem)
 
+config :contact_info, :public_pem, System.get_env("PUBLIC_PEM", default_public_pem)

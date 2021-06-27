@@ -1,5 +1,4 @@
 defmodule ContactInfo.ContactEntries do
-
   alias ContactInfo.{Repo, Contact}
 
   @fields [
@@ -23,10 +22,14 @@ defmodule ContactInfo.ContactEntries do
   Creates a new entry.
   """
   def create_entry(contact_info) do
-    changeset = Contact.changeset(%Contact{},
-      for {key, val} <- contact_info, into: %{} do
-	{String.to_atom(key), val}
-      end)
+    changeset =
+      Contact.changeset(
+        %Contact{},
+        for {key, val} <- contact_info, into: %{} do
+          {String.to_atom(key), val}
+        end
+      )
+
     apply_upsert_changeset(changeset, &Repo.insert/1, :create)
   end
 
@@ -41,13 +44,17 @@ defmodule ContactInfo.ContactEntries do
 
   defp apply_upsert_changeset(changeset, func, op) do
     case func.(changeset) do
-      {:ok, created} -> {:ok, created.case_id, %{op: op, changes: changeset.changes}}
+      {:ok, created} ->
+        {:ok, created.case_id, %{op: op, changes: changeset.changes}}
+
       {:error, ch} ->
-	msg = case Keyword.get(ch.errors, :case_id) do
-		nil -> "Unknown error"
-		{err_msg, _} -> "Case ID #{err_msg}"
-	      end
-	{:error, msg}
+        msg =
+          case Keyword.get(ch.errors, :case_id) do
+            nil -> "Unknown error"
+            {err_msg, _} -> "Case ID #{err_msg}"
+          end
+
+        {:error, msg}
     end
   end
 
@@ -56,10 +63,12 @@ defmodule ContactInfo.ContactEntries do
   """
   def delete_entry(case_id) do
     case fetch_entry(case_id) do
-      nil -> {:error, "Case ID #{case_id} doesn't exist"}
+      nil ->
+        {:error, "Case ID #{case_id} doesn't exist"}
+
       contact_info ->
-	Repo.delete(contact_info)
-	{:ok, case_id, %{op: :delete}}
+        Repo.delete(contact_info)
+        {:ok, case_id, %{op: :delete}}
     end
   end
 
@@ -69,5 +78,4 @@ defmodule ContactInfo.ContactEntries do
   def fields() do
     @fields
   end
-
 end

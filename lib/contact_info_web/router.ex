@@ -5,7 +5,7 @@ defmodule ContactInfoWeb.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_flash
-    plug :protect_from_forgery
+    #plug :protect_from_forgery
     plug :put_secure_browser_headers
   end
 
@@ -17,9 +17,14 @@ defmodule ContactInfoWeb.Router do
     plug ContactInfoWeb.JwtAuthPlug
   end
 
+  pipeline :logging do
+    plug ContactInfoWeb.LogPlug
+  end
+
   scope "/", ContactInfoWeb do
     pipe_through :browser
     pipe_through :auth
+    pipe_through :logging
 
     resources "/", ContactInfoController,
       only: [:index, :new, :show, :create, :update, :delete],

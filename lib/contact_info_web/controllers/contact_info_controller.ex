@@ -18,7 +18,9 @@ defmodule ContactInfoWeb.ContactInfoController do
 	case_data = for {key, text} <- fields() do
 	    {key, %{field_name: text, value: Map.get(contact_info, key)}}
 	  end
-	render(conn, "case.html", case_data: case_data)
+	conn
+	|> assign(:change_description, %{op: :read, case_id: case_id})
+	|> render("case.html", case_data: case_data)
     end
   end
 
@@ -44,9 +46,10 @@ defmodule ContactInfoWeb.ContactInfoController do
 
   defp process_return_value(rv, conn, success_msg_gen, opts \\ []) do
     case rv do
-      {:ok, case_id} ->
+      {:ok, case_id, change_description} ->
 	conn
 	|> put_flash(:info, success_msg_gen.(case_id))
+	|> assign(:change_description, Map.put(change_description, :case_id, case_id))
 	|> redirect(to: Keyword.get(opts, :redirect_success, current_path(conn)))
       {:error, msg} ->
 	conn

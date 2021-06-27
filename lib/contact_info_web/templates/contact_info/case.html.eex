@@ -11,7 +11,7 @@
 
 <h3> Update info </h3>
 
-<%= form_for @conn, Routes.contact_info_path(@conn, :update, Keyword.get(@case_data, :case_id).value), [as: :contact_info, method: "put"], fn f -> %>
+<%= form_for @conn, Routes.contact_info_path(@conn, :update, @case_data[:case_id].value), [as: :contact_info, method: "put"], fn f -> %>
   <%= for {key, field} <- @case_data do %>
       <%= label f, field.field_name %><%= text_input f, key, value: field.value %>
   <% end %>
@@ -19,7 +19,7 @@
   <%= submit "Update" %>
 <% end %>
 
-<%= form_for @conn, Routes.contact_info_path(@conn, :delete, Keyword.get(@case_data, :case_id).value), [method: "delete"], fn f -> %>
+<%= form_for @conn, Routes.contact_info_path(@conn, :delete, @case_data[:case_id].value), [method: "delete"], fn f -> %>
   <%= submit "Delete" %>
 <% end %>
 

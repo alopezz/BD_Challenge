@@ -5,7 +5,10 @@ defmodule ContactInfoWeb.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_flash
-    # plug :protect_from_forgery
+    # Don't use CSRF protection in dev environment
+    if Mix.env() not in [:dev, :test] do
+      plug :protect_from_forgery
+    end
     plug :put_secure_browser_headers
   end
 

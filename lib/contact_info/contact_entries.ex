@@ -23,12 +23,11 @@ defmodule ContactInfo.ContactEntries do
   Creates a new entry.
   """
   def create_entry(contact_info) do
-    Repo.insert(
-      struct(%Contact{},
-	for {key, val} <- contact_info, into: %{} do
-	    {String.to_atom(key), val}
-	end)
-    )
+    changeset = Contact.changeset(%Contact{},
+      for {key, val} <- contact_info, into: %{} do
+	{String.to_atom(key), val}
+      end)
+    handle_upsert_result(Repo.insert(changeset))
   end
 
   @doc """
@@ -36,7 +35,20 @@ defmodule ContactInfo.ContactEntries do
   """
   def update_entry(case_id, new_contact_info) do
     contact_info = fetch_entry(case_id)
-    Repo.update(Contact.changeset(contact_info, new_contact_info))
+    changeset = Contact.changeset(contact_info, new_contact_info)
+    handle_upsert_result(Repo.update(changeset))
+  end
+
+  defp handle_upsert_result(upsert_result) do
+    case upsert_result do
+      {:ok, created} -> {:ok, created.case_id}
+      {:error, ch} ->
+	msg = case Keyword.get(ch.errors, :case_id) do
+		nil -> "Unknown error"
+		{err_msg, _} -> "Case ID #{err_msg}"
+	      end
+	{:error, msg}
+    end
   end
 
   @doc """

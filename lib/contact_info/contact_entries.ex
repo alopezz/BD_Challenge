@@ -55,7 +55,12 @@ defmodule ContactInfo.ContactEntries do
   Deletes an entry.
   """
   def delete_entry(case_id) do
-    Repo.delete(fetch_entry(case_id))
+    case fetch_entry(case_id) do
+      nil -> {:error, "Case ID #{case_id} doesn't exist"}
+      contact_info ->
+	Repo.delete(contact_info)
+	{:ok, case_id}
+    end
   end
 
   @doc """

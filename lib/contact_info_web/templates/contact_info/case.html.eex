@@ -15,7 +15,6 @@
   <%= for {key, field} <- @case_data do %>
       <%= label f, field.field_name %><%= text_input f, key, value: field.value %>
   <% end %>
-
   <%= submit "Update" %>
 <% end %>
 

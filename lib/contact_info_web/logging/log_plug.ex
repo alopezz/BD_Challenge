@@ -11,7 +11,7 @@ defmodule ContactInfoWeb.LogPlug do
   def log_changes(conn) do
     user_id = case Map.get(conn.assigns, :claims) do
 		nil -> "Unknown"
-		{:ok, claims} -> claims["sub"]["id"]
+		{:ok, claims} -> Map.get(claims["sub"], "id", "Unknown")
 	      end
 
     change_description = case Map.get(conn.assigns, :change_description) do

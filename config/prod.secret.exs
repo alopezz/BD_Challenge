@@ -30,6 +30,15 @@ config :contact_info, ContactInfoWeb.Endpoint,
   ],
   secret_key_base: secret_key_base
 
+# Configure authentication
+config :contact_info, :auth_required, true
+
+config :contact_info, :public_pem,
+  System.get_env("PUBLIC_PEM") ||
+  raise """
+  A public key for authenticating tokens is required in production
+  """
+
 # ## Using releases (Elixir v1.9+)
 #
 # If you are doing OTP releases, you need to instruct Phoenix

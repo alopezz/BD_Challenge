@@ -5,9 +5,18 @@ defmodule ContactInfoWeb.JwtAuthPlug do
   def init(opts), do: opts
 
   def call(conn, _opts) do
+    if Application.get_env(:contact_info, :auth_required, true) do
+      public_pem = Application.get_env(:contact_info, :public_pem)
+      authenticate(conn, public_pem)
+    else
+      conn
+    end
+  end
+
+  defp authenticate(conn, public_pem) do
     decoded = conn
     |> bearers_from_header
-    |> Enum.map(&JwtAuthToken.decode/1)
+    |> Enum.map(&JwtAuthToken.decode(&1, public_pem))
     |> Enum.find(fn
       {:ok, _} -> true
       _ -> false
@@ -30,7 +39,6 @@ defmodule ContactInfoWeb.JwtAuthPlug do
     |> Phoenix.Controller.render("401.html")
     |> halt
   end
-
 
   # Return a list with the bearer tokens in the headers.
   defp bearers_from_header(conn) do

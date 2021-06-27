@@ -8,12 +8,11 @@ To start your Phoenix server:
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+## Auth
 
-## Learn more
+The public key for authentication can be set with the environment variable
+`PUBLIC_PEM`. This must be set for the `prod` environment.
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+In the `dev` environment, a default public key is used for authentication if none is
+provided. Also, it's possible to disable authentication by setting the `SKIP_AUTH`
+variable.

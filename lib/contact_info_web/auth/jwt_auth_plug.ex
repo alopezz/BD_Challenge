@@ -26,13 +26,13 @@ defmodule ContactInfoWeb.JwtAuthPlug do
   defp forbidden(conn) do
     conn
     |> put_status(:unauthorized)
-    |> Phoenix.Controller.render(ContactInfoWeb.ErrorView, "401.html")
+    |> Phoenix.Controller.put_view(ContactInfoWeb.ErrorView)
+    |> Phoenix.Controller.render("401.html")
     |> halt
   end
 
-  @doc """
-  Returns a list with the bearer tokens in the headers.
-  """
+
+  # Return a list with the bearer tokens in the headers.
   defp bearers_from_header(conn) do
     Enum.reduce(conn.req_headers, [], fn header, acc ->
       case header do

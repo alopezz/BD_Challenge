@@ -18,7 +18,7 @@
   <%= submit "Update" %>
 <% end %>
 
-<%= form_for @conn, Routes.contact_info_path(@conn, :delete, @case_data[:case_id].value), [method: "delete"], fn f -> %>
+<%= form_for @conn, Routes.contact_info_path(@conn, :delete, @case_data[:case_id].value), [method: "delete"], fn _f -> %>
   <%= submit "Delete" %>
 <% end %>
 

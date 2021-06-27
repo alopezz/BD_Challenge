@@ -13,8 +13,13 @@ defmodule ContactInfoWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth do
+    plug ContactInfoWeb.JwtAuthPlug
+  end
+
   scope "/", ContactInfoWeb do
     pipe_through :browser
+    pipe_through :auth
 
     resources "/", ContactInfoController,
       only: [:index, :new, :show, :create, :update, :delete],

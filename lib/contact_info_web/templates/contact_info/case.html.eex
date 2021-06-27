@@ -1,0 +1,25 @@
+<h3> Contact info </h3>
+
+<table>
+  <%= for {_key, field} <- @case_data do %>
+      <tr>
+	<td><%= field.field_name %></td>
+	<td><%= field.value %></td>
+      </tr>
+  <% end %>
+</table>
+
+<h3> Update info </h3>
+
+<%= form_for @conn, Routes.contact_info_path(@conn, :update, Keyword.get(@case_data, :case_id).value), [as: :contact_info, method: "put"], fn f -> %>
+  <%= for {key, field} <- @case_data do %>
+      <%= label f, field.field_name %><%= text_input f, key, value: field.value %>
+  <% end %>
+
+  <%= submit "Update" %>
+<% end %>
+
+<%= form_for @conn, Routes.contact_info_path(@conn, :delete, Keyword.get(@case_data, :case_id).value), [method: "delete"], fn f -> %>
+  <%= submit "Delete" %>
+<% end %>
+

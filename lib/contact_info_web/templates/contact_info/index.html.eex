@@ -1,0 +1,6 @@
+<%= link "Create case", to: Routes.contact_info_path(@conn, :new) %>
+
+<%= form_for @conn, Routes.contact_info_path(@conn, :search), [as: :form_info], fn f -> %>
+  <%= text_input f, :case_id %>
+  <%= submit "Go" %>
+<% end %>

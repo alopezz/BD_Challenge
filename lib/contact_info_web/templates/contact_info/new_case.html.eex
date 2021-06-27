@@ -1,0 +1,9 @@
+<h3> New Contact info for Case </h3>
+
+<%= form_for @conn, Routes.contact_info_path(@conn, :create), [as: :contact_info], fn f -> %>
+  <%= for {key, field} <- @fields do %>
+      <%= label f, field %><%= text_input f, key%>
+  <% end %>
+
+  <%= submit "Create" %>
+<% end %>

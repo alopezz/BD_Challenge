@@ -1,20 +1,30 @@
 defmodule ContactInfoWeb.ContactInfoController do
   use ContactInfoWeb, :controller
 
+  alias ContactInfo.{Repo, Contact}
+
   def index(conn, _params) do
     render(conn, "index.html")
   end
 
   def show(conn, %{"case_id" => case_id}) do
-    case_data = [
-      case_id: %{field_name: "Case ID", value: case_id},
-      title: %{field_name: "Title", value: "Herr"},
-      first_name: %{field_name: "First Name", value: "Mark"},
-      last_name: %{field_name: "Last Name", value: "Schmidt"},
-      mobile_phone_number: %{field_name: "Mobile Phone Number: ", value: "123456789"},
-      address: %{field_name: "Address", value: "Some Street, in some city and some number"}
+    import Ecto.Query
+
+    contact_info = Repo.one(from c in Contact, where: c.case_id == ^case_id)
+
+    fields = [
+      case_id: "Case ID",
+      title: "Title",
+      first_name: "First Name",
+      last_name: "Last Name",
+      mobile_phone_number: "Mobile Phone Number",
+      address: "Address"
     ]
 
+    case_data = for {key, text} <- fields do
+      {key, %{field_name: text, value: Map.get(contact_info, key)}}
+    end
+    
     render(conn, "case.html", case_data: case_data)
   end
 
@@ -31,8 +41,12 @@ defmodule ContactInfoWeb.ContactInfoController do
     render(conn, "new_case.html", fields: fields)
   end
 
-  def create(conn, _params) do
-    IO.inspect(conn.body_params)
+  def create(conn, %{"contact_info" => contact_info}) do
+    Repo.insert(struct(%Contact{},
+      for {key, val} <- contact_info, into: %{} do
+	{String.to_atom(key), val}
+      end
+    ))
     redirect(conn, to: Routes.contact_info_path(conn, :index))
   end
 

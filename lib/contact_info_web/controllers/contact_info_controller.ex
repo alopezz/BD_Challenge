@@ -1,7 +1,5 @@
 defmodule ContactInfoWeb.ContactInfoController do
   use ContactInfoWeb, :controller
-
-  alias ContactInfo.{Repo, Contact}
   import ContactInfo.ContactEntries
 
   def index(conn, _params) do

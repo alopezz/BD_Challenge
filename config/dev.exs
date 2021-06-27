@@ -68,8 +68,7 @@ config :phoenix, :stacktrace_depth, 20
 config :phoenix, :plug_init_mode, :runtime
 
 # Configure authentication
-auth_required = !System.get_env("SKIP_AUTH")
-config :contact_info, :auth_required, auth_required
+config :contact_info, :auth_required, false
 
 default_public_pem = """
 -----BEGIN PUBLIC KEY-----

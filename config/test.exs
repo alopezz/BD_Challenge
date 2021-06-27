@@ -20,3 +20,6 @@ config :contact_info, ContactInfoWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+# Configure authentication
+config :contact_info, :auth_required, false

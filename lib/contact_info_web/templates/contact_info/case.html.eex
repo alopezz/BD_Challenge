@@ -15,7 +15,7 @@
   <%= for {key, field} <- @case_data do %>
       <%= label f, field.field_name %><%= text_input f, key, value: field.value %>
   <% end %>
-  <%= submit "Update" %>
+  <%= submit "Save changes" %>
 <% end %>
 
 <%= form_for @conn, Routes.contact_info_path(@conn, :delete, @case_data[:case_id].value), [method: "delete"], fn _f -> %>
